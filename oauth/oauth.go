@@ -21,7 +21,7 @@ const (
 var (
 	oauthRestClient = rest.RequestBuilder {
 		BaseURL: "http://localhost:8080",
-		Timeout: 200 * time.Milisecond,
+		Timeout: 200 * time.Miliseconds,
 	}
 )
 
@@ -42,7 +42,7 @@ func GetCallerId(request *http.Request) int64 {
 	if request == nil {
 		return 0
 	}
-	callerId, err := strconv.ParaseInt(request.Header.Get(headerXCallerId), 10, 64)
+	callerId, err := strconv.ParseInt(request.Header.Get(headerXCallerId), 10, 64)
 	if err != nil {
 		return 0
 	}
@@ -64,14 +64,14 @@ func AuthenticateRequest(request *http.Request) *errors.RestErr {
 	if request == nil {
                 return nil
         }
-	accessToken := strings.TrimSpace(request.URL.Query(paramAccessToken))
+	accessTokenId := strings.TrimSpace(request.URL.Query().Get(paramAccessToken))
 	if accessToken == "" {
 		return nil
 	}
 
 	cleanRequest(request)
 
-	at, err := GetAccessToken(accessTokenId)
+	at, err := getAccessToken(accessTokenId)
 	if err != nil {
 		if err.Status == http.StatusNotFound {
 			return nil
@@ -103,9 +103,6 @@ func getAccessToken(accessTokenId string) (*accessToken, *errors.RestErr) {
 		var restErr errors.RestErr
 		if err := json.Unmarshal(response.Bytes(), &restErr); err != nil {
 			return nil, errors.NewInternalServerError("invalid error interface when trying to get access token")
-		}
-		if response.StatusCode == 404 {
-			return nil
 		}
 		return nil, &restErr
 	}
