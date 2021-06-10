@@ -21,7 +21,7 @@ const (
 var (
 	oauthRestClient = rest.RequestBuilder {
 		BaseURL: "http://localhost:8080",
-		Timeout: 200 * time.Miliseconds,
+		Timeout: 200 * time.Millisecond,
 	}
 )
 
@@ -65,7 +65,7 @@ func AuthenticateRequest(request *http.Request) *errors.RestErr {
                 return nil
         }
 	accessTokenId := strings.TrimSpace(request.URL.Query().Get(paramAccessToken))
-	if accessToken == "" {
+	if accessTokenId == "" {
 		return nil
 	}
 
