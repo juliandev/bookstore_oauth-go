@@ -12,6 +12,7 @@ import (
 )
 
 const (
+	oauthApiHost     = os.Getenv("OAUTH_API_HOST")
 	headerXPublic    = "X-Public"
 	headerXClientId  = "X-Client-Id"
 	headerXCallerId  = "X-User-Id"
@@ -20,7 +21,7 @@ const (
 
 var (
 	oauthRestClient = rest.RequestBuilder {
-		BaseURL: "http://localhost:8090",
+		BaseURL: oauthApiHost,
 		Timeout: 200 * time.Millisecond,
 	}
 )
