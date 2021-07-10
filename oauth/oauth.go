@@ -13,6 +13,7 @@ import (
 )
 
 const (
+	oauthApiHost     = "http://oauth-api:8090"
 	headerXPublic    = "X-Public"
 	headerXClientId  = "X-Client-Id"
 	headerXCallerId  = "X-User-Id"
