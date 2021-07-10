@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	oauthApiHost     = "http://oauth-api:8090"
+	oauthApiLocal    = "http://localhost:8090"
 	headerXPublic    = "X-Public"
 	headerXClientId  = "X-Client-Id"
 	headerXCallerId  = "X-User-Id"
@@ -94,6 +94,9 @@ func cleanRequest(request *http.Request) {
 }
 
 func getAccessToken(accessTokenId string) (*accessToken, *errors.RestErr) {
+	if oauthApiHost == "" {
+		oauthRestClient.BaseURL = oauthApiLocal
+	}
 	response := oauthRestClient.Get(fmt.Sprintf("/oauth/access_token/%s", accessTokenId))
 	if response == nil || response.Response == nil {
 		return nil, errors.NewInternalServerError("invalid restclient response when trying to get access token")
