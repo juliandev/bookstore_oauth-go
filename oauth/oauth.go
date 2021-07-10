@@ -9,11 +9,10 @@ import (
 	"fmt"
 	"encoding/json"
 	"strconv"
-	"os"
 )
 
 const (
-	oauthApiLocal    = "http://localhost:8090"
+	oauthApiLocal    = "http://oauth-api:8090"
 	headerXPublic    = "X-Public"
 	headerXClientId  = "X-Client-Id"
 	headerXCallerId  = "X-User-Id"
@@ -21,9 +20,8 @@ const (
 )
 
 var (
-	oauthApiHost    = os.Getenv("OAUTH_API_HOST")
 	oauthRestClient = rest.RequestBuilder {
-		BaseURL: oauthApiHost,
+		BaseURL: oauthApiLocal,
 		Timeout: 200 * time.Millisecond,
 	}
 )
@@ -94,9 +92,6 @@ func cleanRequest(request *http.Request) {
 }
 
 func getAccessToken(accessTokenId string) (*accessToken, *errors.RestErr) {
-	if oauthApiHost == "" {
-		oauthRestClient.BaseURL = oauthApiLocal
-	}
 	response := oauthRestClient.Get(fmt.Sprintf("/oauth/access_token/%s", accessTokenId))
 	if response == nil || response.Response == nil {
 		return nil, errors.NewInternalServerError("invalid restclient response when trying to get access token")
